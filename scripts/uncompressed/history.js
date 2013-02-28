@@ -148,7 +148,6 @@
 		 */
 		History.options.delayInit = History.options.delayInit || false;
 
-
 		// ====================================================================
 		// Interval record
 
@@ -589,7 +588,7 @@
 
 			if (doc.URL.indexOf('#') == -1 && doc.location.href.indexOf('#') != -1)
 				return doc.location.href;
-			
+
 			return doc.URL || doc.location.href;
 		};
 
@@ -744,7 +743,7 @@
 			newState = {};
 			newState.normalized = true;
 			newState.title = oldState.title||'';
-			newState.url = History.getFullUrl(oldState.url?oldState.url:(History.getLocationHref()));
+			newState.url = History.getFullUrl(History.unescapeString(oldState.url||document.location.href));
 			newState.hash = History.getShortUrl(newState.url);
 			newState.data = History.cloneObject(oldState.data);
 
@@ -900,7 +899,7 @@
 			var id,parts,url, tmp;
 
 			// Extract
-			
+
 			// If the URL has a #, use the id from before the #
 			if (url_or_hash.indexOf('#') != -1)
 			{
@@ -910,7 +909,7 @@
 			{
 				tmp = url_or_hash;
 			}
-			
+
 			parts = /(.*)\&_suid=([0-9]+)$/.exec(tmp);
 			url = parts ? (parts[1]||url_or_hash) : url_or_hash;
 			id = parts ? String(parts[2]||'') : '';
@@ -939,7 +938,7 @@
 		 * @param {String} url_or_hash
 		 * @return {State|null}
 		 */
-		History.extractState = function(url_or_hash,create){
+		History.extractState = function(url_or_hash,create,title){
 			// Prepare
 			var State = null, id, url;
 			create = create||false;
@@ -963,7 +962,7 @@
 
 				// Create State
 				if ( !State && create && !History.isTraditionalAnchor(url_or_hash) ) {
-					State = History.createStateObject(null,null,url);
+					State = History.createStateObject(null,title||null,url);
 				}
 			}
 
@@ -1110,7 +1109,7 @@
 			// Return State
 			return State;
 		};
-		
+
 		/**
 		 * History.getCurrentIndex()
 		 * Gets the current index
@@ -1119,7 +1118,7 @@
 		History.getCurrentIndex = function(){
 			// Prepare
 			var index = null;
-			
+
 			// No states saved
 			if(History.savedStates.length < 1) {
 				index = 0;
@@ -1912,7 +1911,7 @@
 		/**
 		 * Create the initial State
 		 */
-		History.saveState(History.storeState(History.extractState(History.getLocationHref(),true)));
+		History.saveState(History.storeState(History.extractState(History.getLocationHref(),true,document.title)));
 
 		/**
 		 * Bind for Saving Store
