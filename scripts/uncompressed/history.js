@@ -1297,9 +1297,14 @@
 			if ( !title ) {
 				firstState = History.getStateByIndex(0);
 				if ( firstState && firstState.url === newState.url ) {
-					title = firstState.title||History.options.initialTitle;
+					title = firstState.title;
 				}
 			}
+
+      // Still no title. Use initialTitle.
+      if ( !title ) {
+        title = History.options.initialTitle;
+      }
 
 			// Apply
 			try {
