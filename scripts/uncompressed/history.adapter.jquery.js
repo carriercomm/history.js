@@ -9,6 +9,10 @@
 (function(window,undefined){
 	"use strict";
 
+	if (typeof DISABLE_HISTORY_JS !== 'undefined' && DISABLE_HISTORY_JS) {
+		return;
+	}
+
 	// Localise Globals
 	var
 		History = window.History = window.History||{},
